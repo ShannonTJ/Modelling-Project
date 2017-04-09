@@ -778,7 +778,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     else if(key == GLFW_KEY_KP_DIVIDE)
     	cam.resetCamera();
     	
-    else if(key == GLFW_KEY_P && action == GLFW_PRESS)
+    else if(key == GLFW_KEY_P)
     {
 		
 		//red
@@ -795,44 +795,50 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			red = 255;
 			blue = 0;
-			green = 140;
-			nextColor++;			
-		}
-		
-		//yellow
-		else if(nextColor == 2)
-		{
-			red = 255;
-			blue = 0;
-			green = 255;
-			nextColor++;
-		}
+			green = green + 5;
+			if(green == 255)
+				nextColor++;
+			}			
 		
 		//green
-		else if(nextColor == 3)
+		else if(nextColor == 2)
 		{
-			red = 0;
+			red = red - 5;
 			blue = 0;
 			green = 255;
-			nextColor++;
+			if(red == 0)
+				nextColor++;
 		}	
 		
 		//blue
-		else if(nextColor == 4)
+		else if(nextColor == 3)
 		{
 			red = 0;
-			blue = 255;
-			green = 0;
-			nextColor++;
+			blue = blue + 5;
+			green = green - 5;
+			if(blue == 255)
+				nextColor++;
 		}
 		
 		//purple
+		else if(nextColor == 4)
+		{
+			red = red + 5;	
+			green = 0;
+			if(red == 150)
+				nextColor++;
+		}	
+		
+		//back to start
 		else if(nextColor == 5)
 		{
-			red = 148;
-			blue = 211;
+			if(red < 255)
+				red = red + 5;	
+		
+			blue = blue - 5;
 			green = 0;
-			nextColor = 0;
+			if(blue == 0)
+				nextColor = 0;
 		}	
 			
 	}
