@@ -810,18 +810,30 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 				nextColor++;
 		}	
 		
-		//blue
+		//teal
 		else if(nextColor == 3)
 		{
 			red = 0;
 			blue = blue + 5;
+			if(green > 200)
+				green = green - 5;
+			if(blue == 200)
+				nextColor++;
+		}
+		
+		//blue
+		else if(nextColor == 4)
+		{
+			red = 0;
+			if(blue < 255)
+				blue = blue + 5;
 			green = green - 5;
-			if(blue == 255)
+			if(green == 0)
 				nextColor++;
 		}
 		
 		//purple
-		else if(nextColor == 4)
+		else if(nextColor == 5)
 		{
 			red = red + 5;	
 			green = 0;
@@ -830,7 +842,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		}	
 		
 		//back to start
-		else if(nextColor == 5)
+		else if(nextColor == 6)
 		{
 			if(red < 255)
 				red = red + 5;	
