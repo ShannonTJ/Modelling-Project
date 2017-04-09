@@ -837,7 +837,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		{
 			red = red + 5;	
 			green = 0;
-			if(red == 150)
+			if(red == 255)
 				nextColor++;
 		}	
 		
