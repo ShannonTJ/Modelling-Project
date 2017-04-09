@@ -95,6 +95,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
 void callBackInit(GLFWwindow* window);
 void loadGeometryArrays(GLuint program, Geometry &g);
+void setDrawingMode(int mode, GLuint program);
 void render(GLuint program, Geometry &g, GLenum drawType);
 void compileShader(GLuint &shader, string &filepath, GLenum shaderType);
 void initDefaultShaders(vector<Shader> &shaders);
@@ -117,6 +118,13 @@ int loadCamera(vec3 cameraPos, GLuint program);
 int openGLerror();
 
 double calculateFPS(double prevTime, double currentTime);
+
+		float red;
+		float green;
+		float blue;
+
+		int nextColor = 0;
+		
 //########################################################################################
 
 //--------------------------------------------------------------------------------------\\
@@ -169,9 +177,11 @@ int main(int argc, char **argv)
 		glClearColor(0, 0.2f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		r.getGeometry(shapes[0].vertices, shapes[0].indices);
+		r.getGeometry(shapes[0].vertices, shapes[0].indices, shapes[0].normals);
 		loadGeometryArrays(programs[0], shapes[0]);
-		render(programs[0], shapes[0], GL_LINE_STRIP);
+	
+		loadColor(vec4(red/255.f,green/255.f,blue/255.f,1), programs[0]);
+		render(programs[0], shapes[0], GL_TRIANGLES);
 
 		/*r.rotate(0.01);
 		float t = glfwGetTime();
@@ -207,6 +217,19 @@ int main(int argc, char **argv)
 *	Rendering Functions:
 */
 //========================================================================================
+void setDrawingMode(int mode, GLuint program)
+{
+	glUseProgram(program);
+	GLint loc = glGetUniformLocation(program, "drawMode");
+	if(loc == GL_INVALID_VALUE || loc==GL_INVALID_OPERATION)
+	{
+		cerr << "Error returned when trying to find uniform location."
+			<< "\nuniform: drawMode"
+			<< "Error num: " << loc
+			<< endl;
+	}
+	glUniform1i(loc, mode);
+}
 
 //Need more versions of this:
 void loadGeometryArrays(GLuint program, Geometry &g)
@@ -252,6 +275,20 @@ void render(GLuint program, Geometry &g, GLenum drawType)
 		glDrawArrays(drawType, 0, g.vertices.size());
 }
 
+int loadColor(vec4 color, GLuint program)
+{
+	glUseProgram(program);
+	GLint loc = glGetUniformLocation(program, "color");
+	/*if (loc == -1)
+	{
+		cerr << "Uniform: error loading \"color\"." << endl;
+		return -1;
+	}*/
+	glUniform4f(loc, color[0], color[1], color[2], color[3]);
+
+	return 1;
+}
+
 int loadViewProjMatrix(Camera &c, GLuint &program)
 {
 	glUseProgram(program);
@@ -279,20 +316,6 @@ int loadViewProjMatrix(Camera &c, GLuint &program)
 	glUniformMatrix4fv(loc, 1, GL_FALSE, value_ptr(c.getPerspectiveMatrix()));
 
 	return 0;
-}
-
-int loadColor(vec4 color, GLuint program)
-{
-	glUseProgram(program);
-	GLint loc = glGetUniformLocation(program, "color");
-	if (loc == -1)
-	{
-		cerr << "Uniform: \"color\" not found." << endl;
-		return -1;
-	}
-	glUniform4f(loc, color[0], color[1], color[2], color[3]);
-
-	return 1;
 }
 
 int loadCamera(vec3 cameraPos, GLuint program)
@@ -754,5 +777,64 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     else if(key == GLFW_KEY_KP_DIVIDE)
     	cam.resetCamera();
+    	
+    else if(key == GLFW_KEY_P && action == GLFW_PRESS)
+    {
+		
+		//red
+		if(nextColor == 0)
+		{
+			red = 255;
+			blue = 0;
+			green = 0;
+			nextColor++;
+		}	
+		
+		//orange
+		else if(nextColor == 1)
+		{
+			red = 255;
+			blue = 0;
+			green = 140;
+			nextColor++;			
+		}
+		
+		//yellow
+		else if(nextColor == 2)
+		{
+			red = 255;
+			blue = 0;
+			green = 255;
+			nextColor++;
+		}
+		
+		//green
+		else if(nextColor == 3)
+		{
+			red = 0;
+			blue = 0;
+			green = 255;
+			nextColor++;
+		}	
+		
+		//blue
+		else if(nextColor == 4)
+		{
+			red = 0;
+			blue = 255;
+			green = 0;
+			nextColor++;
+		}
+		
+		//purple
+		else if(nextColor == 5)
+		{
+			red = 148;
+			blue = 211;
+			green = 0;
+			nextColor = 0;
+		}	
+			
+	}
 }
 //########################################################################################
