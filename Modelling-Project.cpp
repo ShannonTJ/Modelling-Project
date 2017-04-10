@@ -119,9 +119,9 @@ int openGLerror();
 
 double calculateFPS(double prevTime, double currentTime);
 
-		float red;
-		float green;
-		float blue;
+		float red = 255;
+		float green = 255;
+		float blue = 255;
 
 		int nextColor = 0;
 		
@@ -779,18 +779,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     	cam.resetCamera();
     	
     else if(key == GLFW_KEY_P)
-    {
-		
-		//red
+    {		
+		//white to red
 		if(nextColor == 0)
 		{
-			red = 255;
-			blue = 0;
-			green = 0;
-			nextColor++;
-		}	
-		
-		//orange
+			blue = blue - 5;
+			green = green - 5;
+			if(blue == 0)
+				nextColor++;
+		}
+		//red to orange
 		else if(nextColor == 1)
 		{
 			red = 255;
@@ -798,9 +796,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			green = green + 5;
 			if(green == 255)
 				nextColor++;
-			}			
-		
-		//green
+		}			
+		//orange to green
 		else if(nextColor == 2)
 		{
 			red = red - 5;
@@ -809,8 +806,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			if(red == 0)
 				nextColor++;
 		}	
-		
-		//teal
+		//green to teal
 		else if(nextColor == 3)
 		{
 			red = 0;
@@ -819,9 +815,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 				green = green - 5;
 			if(blue == 200)
 				nextColor++;
-		}
-		
-		//blue
+		}	
+		//teal to blue
 		else if(nextColor == 4)
 		{
 			red = 0;
@@ -830,29 +825,46 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			green = green - 5;
 			if(green == 0)
 				nextColor++;
-		}
-		
-		//purple
+		}	
+		//blue to purple
 		else if(nextColor == 5)
 		{
 			red = red + 5;	
 			green = 0;
 			if(red == 255)
 				nextColor++;
-		}	
-		
-		//back to start
+		}		
+		//purple to brown
 		else if(nextColor == 6)
 		{
-			if(red < 255)
-				red = red + 5;	
-		
+			if(red > 140)
+				red = red - 5;
+			if(green < 70)
+				green = green + 5;
 			blue = blue - 5;
-			green = 0;
-			if(blue == 0)
+			if(blue == 20)
+				nextColor++;
+		}
+		//brown to black
+		else if(nextColor == 7)
+		{
+			red = red - 5;
+			if(green > 0)
+				green = green - 5;
+			if(blue > 0)
+				blue = blue - 5;
+			if(red == 0)
+				nextColor++;
+		}
+		//black to white
+		else if(nextColor == 8)
+		{
+			red = red + 5;
+			green = green + 5;
+			blue = blue + 5;
+			if(red == 255)
 				nextColor = 0;
 		}	
-			
 	}
 }
 //########################################################################################
